@@ -14,6 +14,12 @@ Or install locally:
 pip install -e /path/to/git-bootstrap
 ```
 
+Or use the install script (no pip required):
+
+```bash
+curl -sSL https://raw.githubusercontent.com/waynehuang/git-bootstrap/main/install.sh | bash
+```
+
 ## Usage
 
 1. Create an empty repo on GitHub (no README, no .gitignore)
