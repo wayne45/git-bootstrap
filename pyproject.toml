@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "git-bootstrap"
+version = "0.1.0"
+description = "Initialize a local folder as a git repo and link it to a remote GitHub repository"
+requires-python = ">=3.8"
+
+[project.scripts]
+git-bootstrap = "git_bootstrap.cli:main"

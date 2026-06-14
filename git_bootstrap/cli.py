@@ -1,0 +1,72 @@
+import argparse
+import os
+import subprocess
+import sys
+
+
+def run(cmd, cwd=None):
+    result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    return result.returncode, result.stdout.strip(), result.stderr.strip()
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Initialize a local folder as a git repo and link it to a remote GitHub repository."
+    )
+    parser.add_argument("folder", help="Path to the local folder")
+    parser.add_argument("remote", help="GitHub repo URL (e.g. git@github.com:user/repo.git)")
+    parser.add_argument("--branch", default="main", help="Branch name (default: main)")
+    args = parser.parse_args()
+
+    folder = os.path.abspath(args.folder)
+    remote = args.remote
+    branch = args.branch
+
+    if not os.path.isdir(folder):
+        print(f"Error: '{folder}' is not a valid directory.")
+        sys.exit(1)
+
+    # Init
+    git_dir = os.path.join(folder, ".git")
+    if os.path.isdir(git_dir):
+        print(f"Warning: '{folder}' is already a git repository.")
+        confirm = input("Continue and set remote? (y/n): ")
+        if confirm.lower() != "y":
+            print("Aborted.")
+            sys.exit(0)
+    else:
+        code, _, err = run(["git", "init"], cwd=folder)
+        if code != 0:
+            print(f"Error: git init failed: {err}")
+            sys.exit(1)
+        print(f"Initialized git repository in {folder}")
+
+    # Remote
+    code, existing, _ = run(["git", "remote", "get-url", "origin"], cwd=folder)
+    if code == 0:
+        print(f"Remote 'origin' already exists: {existing}")
+        replace = input(f"Replace with {remote}? (y/n): ")
+        if replace.lower() == "y":
+            run(["git", "remote", "set-url", "origin", remote], cwd=folder)
+            print(f"Updated remote 'origin' to {remote}")
+    else:
+        run(["git", "remote", "add", "origin", remote], cwd=folder)
+        print(f"Added remote 'origin': {remote}")
+
+    # Commit and push
+    run(["git", "add", "-A"], cwd=folder)
+    code, _, _ = run(["git", "commit", "-m", "Initial commit"], cwd=folder)
+    if code != 0:
+        print("Nothing to commit.")
+
+    run(["git", "branch", "-M", branch], cwd=folder)
+    code, _, err = run(["git", "push", "-u", "origin", branch], cwd=folder)
+    if code != 0:
+        print(f"Push failed: {err}")
+        sys.exit(1)
+
+    print(f"\nDone! '{folder}' is now linked to {remote}")
+
+
+if __name__ == "__main__":
+    main()
