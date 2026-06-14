@@ -44,7 +44,8 @@ git-bootstrap <folder> <remote-url> [--branch main]
 ## What it does
 
 1. Runs `git init` in the target folder
-2. Adds the GitHub URL as `origin` remote
-3. Commits all files
-4. Pushes to the specified branch
+2. Adds the GitHub URL as `origin` remote (or updates it if one already exists)
+3. Sets the branch name with `git branch -M <branch>`
+
+It does **not** add, commit, or push — you retain full control over when to do that.
 

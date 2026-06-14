@@ -53,19 +53,10 @@ def main():
         run(["git", "remote", "add", "origin", remote], cwd=folder)
         print(f"Added remote 'origin': {remote}")
 
-    # Commit and push
-    run(["git", "add", "-A"], cwd=folder)
-    code, _, _ = run(["git", "commit", "-m", "Initial commit"], cwd=folder)
-    if code != 0:
-        print("Nothing to commit.")
-
     run(["git", "branch", "-M", branch], cwd=folder)
-    code, _, err = run(["git", "push", "-u", "origin", branch], cwd=folder)
-    if code != 0:
-        print(f"Push failed: {err}")
-        sys.exit(1)
 
     print(f"\nDone! '{folder}' is now linked to {remote}")
+    print(f"You can push with: git push -u origin {branch}")
 
 
 if __name__ == "__main__":
