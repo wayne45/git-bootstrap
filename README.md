@@ -5,7 +5,7 @@ Turn any existing local folder into a git repo linked to a remote GitHub reposit
 ## Install
 
 ```bash
-pip install git+https://github.com/waynehuang/git-bootstrap.git
+pip install git+https://github.com/wayne0405/git-bootstrap.git
 ```
 
 Or install locally:
@@ -17,7 +17,7 @@ pip install -e /path/to/git-bootstrap
 Or use the install script (no pip required):
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/waynehuang/git-bootstrap/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/wayne45/git-bootstrap/main/install.sh | bash
 ```
 
 ## Usage
